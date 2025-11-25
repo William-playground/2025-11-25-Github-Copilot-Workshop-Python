@@ -165,7 +165,8 @@ def create_app(mock_mode: bool = False) -> Flask:
     @app.route('/api/timer/reset', methods=['POST'])
     def reset_timer():
         """
-        Reset the timer to initial duration and restart.
+        Reset the timer to initial duration and restart running.
+        This restores the original duration AND starts the timer.
         
         Returns:
             JSON response with success status and timer data.

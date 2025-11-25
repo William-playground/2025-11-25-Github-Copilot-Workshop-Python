@@ -116,7 +116,7 @@ class Timer:
         if self._state != TimerState.PAUSED:
             return False
         
-        if self._pause_remaining is not None and self._pause_remaining > 0:
+        if self._pause_remaining and self._pause_remaining > 0:
             self._start_time = self._get_current_time()
             self._remaining_seconds = self._pause_remaining
             self._pause_remaining = None
@@ -167,12 +167,17 @@ class Timer:
         remaining = self._remaining_seconds - elapsed
         return max(0.0, remaining)
     
+    def _update_expired_state(self) -> None:
+        """Update state if timer has expired."""
+        if self._state == TimerState.RUNNING:
+            remaining = self._get_remaining_seconds()
+            if remaining <= 0:
+                self._state = TimerState.IDLE
+                self._remaining_seconds = 0.0
+    
     def get_state(self) -> TimerState:
         """Get current timer state."""
-        remaining = self._get_remaining_seconds()
-        if self._state == TimerState.RUNNING and remaining <= 0:
-            self._state = TimerState.IDLE
-            self._remaining_seconds = 0.0
+        self._update_expired_state()
         return self._state
     
     def get_data(self) -> TimerData:
