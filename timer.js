@@ -116,10 +116,11 @@ class PomodoroTimer {
         this.updateProgress();
         
         // 完了通知（ブラウザ対応時）
-        if (Notification.permission === 'granted') {
-            new Notification('ポモドーロ完了！', {
+        if ('Notification' in window && Notification.permission === 'granted') {
+            const notification = new Notification('ポモドーロ完了！', {
                 body: '休憩を取りましょう。'
             });
+            notification.onclick = () => notification.close();
         }
     }
     
@@ -163,8 +164,10 @@ class PomodoroTimer {
 document.addEventListener('DOMContentLoaded', () => {
     new PomodoroTimer();
     
-    // 通知の許可をリクエスト
+    // 通知の許可をリクエスト（Promise-based API）
     if ('Notification' in window && Notification.permission === 'default') {
-        Notification.requestPermission();
+        Notification.requestPermission().catch(() => {
+            // 通知許可のリクエストが拒否された場合は何もしない
+        });
     }
 });

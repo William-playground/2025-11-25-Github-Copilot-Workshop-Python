@@ -83,7 +83,6 @@ body {
     stroke: #667eea;
     stroke-width: 8;
     stroke-linecap: round;
-    stroke-dasharray: 565.48;
     stroke-dashoffset: 0;
     transition: stroke-dashoffset 0.5s ease;
 }
